@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
- 
+import { Button, Modal, Form, Card } from "react-bootstrap";
+
 const EditProduct = () => {
   const [name, setName] = useState("");
   const [category, setCategory] = useState("");
@@ -9,19 +10,23 @@ const EditProduct = () => {
   const [stock, setStock] = useState(0);
   const navigate = useNavigate();
   const { id } = useParams();
- 
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
   useEffect(() => {
     getProductById();
   }, []);
- 
+
   const getProductById = async () => {
     const response = await axios.get(`http://localhost:5000/products/${id}`);
     setName(response.data.name);
     setCategory(response.data.category);
     setPrice(response.data.price);
-    setPrice(response.data.stock);
+    setStock(response.data.stock);
   };
- 
+
   const updateProduct = async (e) => {
     e.preventDefault();
     try {
@@ -31,73 +36,98 @@ const EditProduct = () => {
         price,
         stock,
       });
+      handleClose();
       navigate("/");
     } catch (error) {
       console.log(error);
     }
   };
- 
+
   return (
     <div className="columns mt-5">
       <div className="column is-half">
-        <form onSubmit={updateProduct}>
-          <div className="field">
-            <label className="label">Name</label>
-            <div className="control">
-              <input
-                type="text"
-                className="input"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Name"
-              />
-            </div>
-          </div>
-          <div className="field">
-            <label className="label">Category</label>
-            <div className="control">
-              <input
-                type="text"
-                className="input"
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                placeholder="Category"
-              />
-            </div>
-          </div>
-          <div className="field">
-            <label className="label">Price</label>
-            <div className="control">
-              <div className="select is-fullwidth">
-                <input
-                  value={price}
-                  onChange={(e) => setPrice(e.target.value)}
-                />
-              </div>
-            </div>
-          </div>
-          <div className="field">
-            <label className="label">Stock</label>
-            <div className="control">
-              <div className="select is-fullwidth">
-                <input
-                  value={stock}
-                  onChange={(e) => setStock(e.target.value)}
-                />
-              </div>
-            </div>
-          </div>
-          <div className="field">
-            <div className="control">
-              <button type="submit" className="button is-success">
+        <Card >
+          <Card.Header >Ubah data</Card.Header>
+          <Card.Body>
+            <Card-Form>
+              <Form>
+                <Form.Group
+                  className="mb-3"
+                  controlId="exampleForm.ControlInput1"
+                >
+                  <Form.Label>Name</Form.Label>
+                  <Form.Control
+                    type="text"
+                    className="input"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Name"
+                  />
+                </Form.Group>
+                <Form.Group
+                  className="mb-3"
+                  controlId="exampleForm.ControlInput1"
+                >
+                  <Form.Label>Category</Form.Label>
+                  <Form.Control
+                    type="text"
+                    className="input"
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value)}
+                    placeholder="Category"
+                  />
+                </Form.Group>
+                <Form.Group
+                  className="mb-3"
+                  controlId="exampleForm.ControlInput1"
+                >
+                  <Form.Label>Price</Form.Label>
+                  <Form.Control
+                    type="number"
+                    className="input"
+                    value={price}
+                    onChange={(e) => setPrice(e.target.value)}
+                    placeholder="Price"
+                  />
+                </Form.Group>
+                <Form.Group
+                  className="mb-3"
+                  controlId="exampleForm.ControlInput1"
+                >
+                  <Form.Label>Stock</Form.Label>
+                  <Form.Control
+                    type="number"
+                    className="input"
+                    value={stock}
+                    onChange={(e) => setStock(e.target.value)}
+                    placeholder="Stock"
+                  />
+                </Form.Group>
+              </Form>
+              </Card-Form>
+              <Button variant="primary" onClick={handleShow}>
                 Update
-              </button>
-            </div>
-          </div>
-        </form>
+              </Button>
+          </Card.Body>
+        </Card>
+
+        <Modal show={show} onHide={handleClose} style={{ "z-index": "1055" }}>
+          <Modal.Header closeButton>
+            <Modal.Title>Ubah data</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>Simpan Perubahan</Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleClose}>
+              Close
+            </Button>
+            <Button variant="primary" onClick={updateProduct}>
+              Save Changes
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </div>
     </div>
   );
 };
- 
+
 export default EditProduct;

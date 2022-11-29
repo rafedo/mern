@@ -1,14 +1,21 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
- 
-const AddProduct = () => {
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
+import Modal from "react-bootstrap/Modal";
+
+function AddProduct() {
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
   const [name, setName] = useState("");
   const [category, setCategory] = useState("");
   const [price, setPrice] = useState(0);
   const [stock, setStock] = useState(0);
   const navigate = useNavigate();
- 
+
   const saveProduct = async (e) => {
     e.preventDefault();
     try {
@@ -18,75 +25,77 @@ const AddProduct = () => {
         price,
         stock,
       });
-      navigate("/");
+      handleClose();
+      window.location.reload();
     } catch (error) {
       console.log(error);
     }
   };
- 
   return (
-    <div className="columns mt-5">
-      <div className="column is-half">
-        <form onSubmit={saveProduct}>
-          <div className="field">
-            <label className="label">Name</label>
-            <div className="control">
-              <input
+    <div>
+      <Button variant="success" onClick={handleShow}>
+        Add New
+      </Button>
+
+      <Modal show={show} onHide={handleClose} style={{ "z-index": "1055" }}>
+        <Modal.Header closeButton>
+          <Modal.Title>Tambahkan data</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+              <Form.Label>Name</Form.Label>
+              <Form.Control
                 type="text"
                 className="input"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Name"
               />
-            </div>
-          </div>
-          <div className="field">
-            <label className="label">Category</label>
-            <div className="control">
-              <input
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+              <Form.Label>Category</Form.Label>
+              <Form.Control
                 type="text"
                 className="input"
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
                 placeholder="Category"
               />
-            </div>
-          </div>
-          <div className="field">
-            <label className="label">Price</label>
-            <div className="control">
-              <input
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+              <Form.Label>Price</Form.Label>
+              <Form.Control
                 type="number"
                 className="input"
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
                 placeholder="Price"
               />
-            </div>
-          </div>
-          <div className="field">
-            <label className="label">Stock</label>
-            <div className="control">
-              <input
-                type="integer"
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+              <Form.Label>Stock</Form.Label>
+              <Form.Control
+                type="number"
                 className="input"
                 value={stock}
                 onChange={(e) => setStock(e.target.value)}
                 placeholder="Stock"
               />
-            </div>
-          </div>
-          <div className="field">
-            <div className="control">
-              <button type="submit" className="button is-success">
-                Save
-              </button>
-            </div>
-          </div>
-        </form>
-      </div>
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+          <Button variant="success" onClick={saveProduct}>
+            Save Changes
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
-};
- 
+}
+
 export default AddProduct;
