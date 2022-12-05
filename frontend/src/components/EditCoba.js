@@ -44,7 +44,7 @@ const EditCoba = (props) => {
 
   return (
     <div>
-      <Button variant="Primary" onClick={handleShow}>
+      <Button className="button is-info is-small mr-1" onClick={handleShow}>
         Update
       </Button>
       <Modal show={show} onHide={handleClose} style={{ "z-index": "1055" }}>

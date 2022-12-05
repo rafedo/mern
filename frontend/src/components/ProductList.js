@@ -57,13 +57,7 @@ const ProductList = () => {
                         prefix={"IDR. "}
                       />
                     </Card.Text>
-                    <Card.Text> Stock tersisa {product.stock} pcs</Card.Text>
-                    <Link
-                      to={`edit/${product._id}`}
-                      className="button is-info is-small mr-1"
-                    >
-                      Edit
-                    </Link>
+                    <Card.Text> Stock tersisa {product.stock} pcs</Card.Text>                    
                     <EditCoba
                       show={modalShow}
                       onHide={() => setModalShow(false)}
@@ -81,6 +75,7 @@ const ProductList = () => {
             ))}
           </Row>
         </Container>
+        
       </div>
     </div>
   );
